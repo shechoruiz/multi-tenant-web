@@ -1,0 +1,53 @@
+# openspec/config.yaml
+schema: spec-driven
+
+context: |
+  Proyecto: multi-tenant-web (nombre comercial: Shelf)
+  Propósito: Plataforma multi-tenant de e-commerce tipo Shopify donde cada
+    tienda tiene su propia marca, productos, colores y datos aislados.
+    Proyecto de portafolio profesional.
+  Stack planeado: React + TypeScript (frontend), Node.js + TypeScript (backend)
+  Arquitectura: No definida aún (proyecto nuevo desde cero)
+  Testing: No detectado (proyecto vacío)
+  Estilo: No definido aún
+  Modo de artefactos: hybrid (Engram + OpenSpec)
+  Modo de ejecución: interactive
+  Estrategia de PRs: force-chained, stacked-to-main
+  Límite de revisión: 400 líneas
+  Idioma de artefactos: Español neutro profesional
+
+rules:
+  proposal:
+    - Incluir plan de reversión para cambios riesgosos
+  specs:
+    - Usar Given/When/Then para escenarios
+    - Usar palabras clave RFC 2119 (DEBE, DEBERÍA, PUEDE)
+  design:
+    - Incluir diagramas de secuencia para flujos complejos
+    - Documentar decisiones de arquitectura con fundamento
+  tasks:
+    - Agrupar por fase, usar numeración jerárquica
+    - Mantener tareas completables en una sesión
+  apply:
+    guidelines:
+      - Seguir los patrones existentes del código
+    tdd: false
+    test_command: ""
+  verify:
+    test_command: ""
+    build_command: ""
+    coverage_threshold: 0
+  archive:
+    - Advertir antes de fusionar deltas destructivos
+
+testing:
+  strict_tdd: false
+  runner: none
+  layers:
+    unit: false
+    integration: false
+    e2e: false
+  coverage: false
+  linter: false
+  type_checker: false
+  formatter: false

@@ -25,6 +25,7 @@ export interface CreateTenantDTO {
   name: string;
   slug: string;
   email: string;
+  isActive?: boolean;
 }
 
 export interface UpdateTenantDTO {

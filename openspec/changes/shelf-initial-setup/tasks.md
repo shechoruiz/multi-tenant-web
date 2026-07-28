@@ -73,16 +73,16 @@ Chain strategy: stacked-to-main
 
 ## Phase 4: Backend — Capability Plugins
 
-- [ ] 4.1 Create tenant plugin: CRUD /api/tenants + theme preview/publish + GET public theme
-- [ ] 4.2 Create `apps/api/src/lib/asset-store.ts`: FS-based AssetStore with put/get/delete
-- [ ] 4.3 Create `apps/api/src/lib/image-processor.ts`: Sharp resize (thumb/medium/full) + format validation
-- [ ] 4.4 Create assets plugin: POST /api/assets/upload with Sharp pipeline
-- [ ] 4.5 Create catalog plugin: public GET /api/products, GET /api/products/:id, GET /api/categories
-- [ ] 4.6 Create admin-catalog plugin: admin CRUD products + categories + upload
-- [ ] 4.7 Create cart plugin: GET /api/cart, POST/PATCH/DELETE /api/cart/items, DELETE /api/cart, GET /api/cart/price
-- [ ] 4.8 Create cart-merge plugin: POST /api/cart/merge with dedup + stock adjust + inactive removal + warnings
-- [ ] 4.9 Create `apps/api/src/middleware/validate-cart.ts`: tenant-ownership check for cart items
-- [ ] 4.10 Create orders plugin: POST /api/orders/checkout (transactional), GET /api/orders, GET /api/orders/:id, PATCH status, POST cancel
+- [x] 4.1 Create tenant plugin: CRUD /api/tenants + theme preview/publish + GET public theme
+- [x] 4.2 Create `apps/api/src/lib/asset-store.ts`: FS-based AssetStore with put/get/delete
+- [x] 4.3 Create `apps/api/src/lib/image-processor.ts`: Sharp resize (thumb/medium/full) + format validation
+- [x] 4.4 Create assets plugin: POST /api/assets/upload with Sharp pipeline
+- [x] 4.5 Create catalog plugin: public GET /api/products, GET /api/products/:id, GET /api/categories
+- [x] 4.6 Create admin-catalog plugin: admin CRUD products + categories + upload
+- [x] 4.7 Create cart plugin: GET /api/cart, POST/PATCH/DELETE /api/cart/items, DELETE /api/cart, GET /api/cart/price
+- [x] 4.8 Create cart-merge plugin: POST /api/cart/merge with dedup + stock adjust + inactive removal + warnings
+- [x] 4.9 Create `apps/api/src/middleware/validate-cart.ts`: tenant-ownership check for cart items
+- [x] 4.10 Create orders plugin: POST /api/orders/checkout (transactional), GET /api/orders, GET /api/orders/:id, PATCH status, POST cancel
 
 ## Phase 5: Frontend — Foundation & Stores
 

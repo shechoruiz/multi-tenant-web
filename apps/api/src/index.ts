@@ -2,7 +2,11 @@ import Fastify from "fastify";
 import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
 import cookie from "@fastify/cookie";
+import multipart from "@fastify/multipart";
 import { authRoutes } from "./plugins/auth.js";
+import { tenantRoutes } from "./plugins/tenants.js";
+import { assetRoutes } from "./plugins/assets.js";
+import { resolveTenant } from "./middleware/resolve-tenant.js";
 
 const PORT = parseInt(process.env.PORT || "3001", 10);
 const HOST = process.env.HOST || "0.0.0.0";
@@ -26,14 +30,20 @@ async function main() {
     contentSecurityPolicy: false,
   });
   await app.register(cookie);
+  await app.register(multipart, { limits: { fileSize: 10 * 1024 * 1024 } });
+
+  // Global hooks
+  app.addHook("onRequest", resolveTenant);
 
   // Health check
   app.get("/health", async (_request, _reply) => {
     return { status: "ok", timestamp: new Date().toISOString() };
   });
 
-  // Auth routes
+  // Route plugins
   await app.register(authRoutes);
+  await app.register(tenantRoutes);
+  await app.register(assetRoutes);
 
   try {
     await app.listen({ port: PORT, host: HOST });

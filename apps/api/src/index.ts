@@ -6,6 +6,8 @@ import multipart from "@fastify/multipart";
 import { authRoutes } from "./plugins/auth.js";
 import { tenantRoutes } from "./plugins/tenants.js";
 import { assetRoutes } from "./plugins/assets.js";
+import { catalogRoutes } from "./plugins/catalog.js";
+import { adminCatalogRoutes } from "./plugins/admin-catalog.js";
 import { resolveTenant } from "./middleware/resolve-tenant.js";
 
 const PORT = parseInt(process.env.PORT || "3001", 10);
@@ -44,6 +46,8 @@ async function main() {
   await app.register(authRoutes);
   await app.register(tenantRoutes);
   await app.register(assetRoutes);
+  await app.register(catalogRoutes);
+  await app.register(adminCatalogRoutes);
 
   try {
     await app.listen({ port: PORT, host: HOST });

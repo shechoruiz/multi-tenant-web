@@ -77,8 +77,8 @@ Chain strategy: stacked-to-main
 - [x] 4.2 Create `apps/api/src/lib/asset-store.ts`: FS-based AssetStore with put/get/delete
 - [x] 4.3 Create `apps/api/src/lib/image-processor.ts`: Sharp resize (thumb/medium/full) + format validation
 - [x] 4.4 Create assets plugin: POST /api/assets/upload with Sharp pipeline
-- [ ] 4.5 Create catalog plugin: public GET /api/products, GET /api/products/:id, GET /api/categories
-- [ ] 4.6 Create admin-catalog plugin: admin CRUD products + categories + upload
+- [x] 4.5 Create catalog plugin: public GET /api/products, GET /api/products/:id, GET /api/categories
+- [x] 4.6 Create admin-catalog plugin: admin CRUD products + categories + upload
 - [ ] 4.7 Create cart plugin: GET /api/cart, POST/PATCH/DELETE /api/cart/items, DELETE /api/cart, GET /api/cart/price
 - [ ] 4.8 Create cart-merge plugin: POST /api/cart/merge with dedup + stock adjust + inactive removal + warnings
 - [ ] 4.9 Create `apps/api/src/middleware/validate-cart.ts`: tenant-ownership check for cart items

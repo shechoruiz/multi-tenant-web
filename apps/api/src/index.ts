@@ -1,6 +1,8 @@
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
+import cookie from "@fastify/cookie";
+import { authRoutes } from "./plugins/auth.js";
 
 const PORT = parseInt(process.env.PORT || "3001", 10);
 const HOST = process.env.HOST || "0.0.0.0";
@@ -23,11 +25,15 @@ async function main() {
   await app.register(helmet, {
     contentSecurityPolicy: false,
   });
+  await app.register(cookie);
 
   // Health check
   app.get("/health", async (_request, _reply) => {
     return { status: "ok", timestamp: new Date().toISOString() };
   });
+
+  // Auth routes
+  await app.register(authRoutes);
 
   try {
     await app.listen({ port: PORT, host: HOST });

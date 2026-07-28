@@ -61,15 +61,15 @@ Chain strategy: stacked-to-main
 
 ## Phase 3: Backend — Auth & Middleware
 
-- [ ] 3.1 Create `apps/api/src/lib/jwt.ts`: sign/verify JWT with HS256, JwtPayload type
-- [ ] 3.2 Create `apps/api/src/lib/password.ts`: bcrypt hash/compare
-- [ ] 3.3 Create `apps/api/src/lib/state-machine.ts`: OrderStatus canTransition with typed transitions map
-- [ ] 3.4 Create `apps/api/src/lib/order-number.ts`: order number generator `ORD-YYYYMMDD-XXXXXXXX`
-- [ ] 3.5 Create `apps/api/src/lib/events.ts`: EventEmitter wrapper with typed event contracts
-- [ ] 3.6 Create `apps/api/src/middleware/resolve-tenant.ts`: extract slug from path params → Prisma lookup → attach tenantId to request
-- [ ] 3.7 Create `apps/api/src/middleware/require-role.ts`: verify JWT in Authorization header, check role hierarchy
-- [ ] 3.8 Create `apps/api/src/middleware/scope-tenant.ts`: Prisma extension that injects tenantId into all queries
-- [ ] 3.9 Create `apps/api/src/plugins/auth.ts`: POST /auth/login, POST /auth/refresh, POST /auth/logout, POST /auth/forgot-password, POST /auth/reset-password
+- [x] 3.1 Create `apps/api/src/lib/jwt.ts`: sign/verify JWT with HS256, JwtPayload type
+- [x] 3.2 Create `apps/api/src/lib/password.ts`: bcrypt hash/compare
+- [x] 3.3 Create `apps/api/src/lib/state-machine.ts`: OrderStatus canTransition with typed transitions map
+- [x] 3.4 Create `apps/api/src/lib/order-number.ts`: order number generator `ORD-YYYYMMDD-XXXXXXXX`
+- [x] 3.5 Create `apps/api/src/lib/events.ts`: EventEmitter wrapper with typed event contracts
+- [x] 3.6 Create `apps/api/src/middleware/resolve-tenant.ts`: extract slug from path params → Prisma lookup → attach tenantId to request
+- [x] 3.7 Create `apps/api/src/middleware/require-role.ts`: verify JWT in Authorization header, check role hierarchy
+- [x] 3.8 Create `apps/api/src/middleware/scope-tenant.ts`: Prisma extension that injects tenantId into all queries
+- [x] 3.9 Create `apps/api/src/plugins/auth.ts`: POST /auth/login, POST /auth/refresh, POST /auth/logout, POST /auth/forgot-password, POST /auth/reset-password
 
 ## Phase 4: Backend — Capability Plugins
 

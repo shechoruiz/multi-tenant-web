@@ -86,15 +86,15 @@ Chain strategy: stacked-to-main
 
 ## Phase 5: Frontend — Foundation & Stores
 
-- [ ] 5.1 Configure React Router v7 with `/:tenantSlug/*` layout route + auth guard
-- [ ] 5.2 Create `apps/web/src/lib/api.ts`: fetch client with cookie forwarding + auto-refresh on 401
-- [ ] 5.3 Create `apps/web/src/lib/theme.ts`: inject CSS variables from TenantTheme into `<html>` style
-- [ ] 5.4 Create `apps/web/src/hooks/useTenant.ts`: load tenant by slug, expose tenant context
-- [ ] 5.5 Create `apps/web/src/hooks/useTheme.ts`: load published theme, apply CSS variables
-- [ ] 5.6 Create `apps/web/src/stores/auth.ts`: Zustand store with JWT state, login/refresh/logout actions
-- [ ] 5.7 Create `apps/web/src/stores/cart.ts`: Zustand persist middleware (localStorage for anon, API for auth)
-- [ ] 5.8 Create `apps/web/src/hooks/useCart.ts`: detect anon vs auth mode, delegate to correct store backend
-- [ ] 5.9 Create `apps/web/src/lib/cart-local.ts`: localStorage expiry (30d), tenant-switch cleanup utility
+- [x] 5.1 Configure React Router v7 with `/:tenantSlug/*` layout route + auth guard
+- [x] 5.2 Create `apps/web/src/lib/api.ts`: fetch client with cookie forwarding + auto-refresh on 401
+- [x] 5.3 Create `apps/web/src/lib/theme.ts`: inject CSS variables from TenantTheme into `<html>` style
+- [x] 5.4 Create `apps/web/src/hooks/useTenant.ts`: load tenant by slug, expose tenant context
+- [x] 5.5 Create `apps/web/src/hooks/useTheme.ts`: load published theme, apply CSS variables
+- [x] 5.6 Create `apps/web/src/stores/auth.ts`: Zustand store with JWT state, login/refresh/logout actions
+- [x] 5.7 Create `apps/web/src/stores/cart.ts`: Zustand persist middleware (localStorage for anon, API for auth)
+- [x] 5.8 Create `apps/web/src/hooks/useCart.ts`: detect anon vs auth mode, delegate to correct store backend
+- [x] 5.9 Create `apps/web/src/lib/cart-local.ts`: localStorage expiry (30d), tenant-switch cleanup utility
 
 ## Phase 6: Frontend — Pages & Components
 

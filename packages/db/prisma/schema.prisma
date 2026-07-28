@@ -11,6 +11,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ── Enums ──────────────────────────────────────────────────────────────────────
+
 enum Status {
   active
   suspended
@@ -20,31 +22,229 @@ enum Role {
   super_admin
   admin
   staff
+  customer
 }
+
+enum ProductStatus {
+  active
+  inactive
+}
+
+enum OrderStatus {
+  pendiente
+  confirmado
+  en_preparacion
+  enviado
+  entregado
+  cancelado
+}
+
+// ── Tenant ─────────────────────────────────────────────────────────────────────
 
 model Tenant {
   id        String   @id @default(cuid())
   name      String
   slug      String   @unique
+  email     String
+  isActive  Boolean  @default(true)
+  status    Status   @default(active)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  users User[]
+  theme      TenantTheme?
+  users      User[]
+  categories Category[]
+  products   Product[]
+  carts      Cart[]
+  orders     Order[]
 
   @@index([slug])
 }
 
+model TenantTheme {
+  id             String   @id @default(cuid())
+  tenantId       String   @unique
+  primaryColor   String?
+  secondaryColor String?
+  accentColor    String?
+  logoUrl        String?
+  faviconUrl     String?
+  fontFamily     String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+}
+
+// ── Auth ───────────────────────────────────────────────────────────────────────
+
 model User {
-  id        String   @id @default(cuid())
-  email     String
-  name      String?
-  password  String
-  role      Role     @default(staff)
-  tenantId  String?
-  tenant    Tenant?  @relation(fields: [tenantId], references: [id])
-  createdAt DateTime @default(now())
+  id               String    @id @default(cuid())
+  email            String
+  name             String?
+  password         String
+  role             Role      @default(customer)
+  isActive         Boolean   @default(true)
+  resetToken       String?
+  resetTokenExpires DateTime?
+  tenantId         String?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  tenant        Tenant?        @relation(fields: [tenantId], references: [id])
+  refreshTokens RefreshToken[]
+  cart          Cart?
+  orders        Order[]
 
   @@unique([email, tenantId])
   @@index([tenantId])
   @@index([email])
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  isRevoked Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
+}
+
+// ── Catalog ────────────────────────────────────────────────────────────────────
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String
+  parentId  String?
+  tenantId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  parent   Category?  @relation("CategoryParent", fields: [parentId], references: [id])
+  children Category[] @relation("CategoryParent")
+  tenant   Tenant     @relation(fields: [tenantId], references: [id])
+  products Product[]
+
+  @@unique([slug, tenantId])
+  @@index([tenantId])
+}
+
+model Product {
+  id          String        @id @default(cuid())
+  name        String
+  description String?
+  price       Decimal       @db.Decimal(10, 2)
+  sku         String
+  stock       Int           @default(0)
+  status      ProductStatus @default(active)
+  categoryId  String?
+  tenantId    String
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  category   Category?      @relation(fields: [categoryId], references: [id])
+  tenant     Tenant         @relation(fields: [tenantId], references: [id])
+  images     ProductImage[]
+  cartItems  CartItem[]
+  orderItems OrderItem[]
+
+  @@unique([sku, tenantId])
+  @@index([tenantId])
+}
+
+model ProductImage {
+  id        String   @id @default(cuid())
+  url       String
+  altText   String?
+  sortOrder Int      @default(0)
+  productId String
+  createdAt DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+}
+
+// ── Cart ───────────────────────────────────────────────────────────────────────
+
+model Cart {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  tenantId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tenant Tenant     @relation(fields: [tenantId], references: [id])
+  items  CartItem[]
+
+  @@index([tenantId])
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+  cartId    String
+  productId String
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@unique([cartId, productId])
+}
+
+// ── Order ──────────────────────────────────────────────────────────────────────
+
+model Order {
+  id          String      @id @default(cuid())
+  orderNumber String      @unique
+  userId      String
+  tenantId    String
+  status      OrderStatus @default(pendiente)
+  total       Decimal     @db.Decimal(10, 2)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  user    User           @relation(fields: [userId], references: [id])
+  tenant  Tenant         @relation(fields: [tenantId], references: [id])
+  items   OrderItem[]
+  history OrderHistory[]
+
+  @@index([tenantId])
+  @@index([userId])
+}
+
+model OrderItem {
+  id          String  @id @default(cuid())
+  orderId     String
+  productId   String
+  productName String
+  quantity    Int
+  unitPrice   Decimal @db.Decimal(10, 2)
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+}
+
+model OrderHistory {
+  id         String       @id @default(cuid())
+  orderId    String
+  fromStatus OrderStatus?
+  toStatus   OrderStatus
+  changedById String?
+  createdAt  DateTime     @default(now())
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
 }

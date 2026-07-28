@@ -46,18 +46,18 @@ Chain strategy: stacked-to-main
 
 ## Phase 2: Prisma Schema & Shared Types
 
-- [ ] 2.1 Write full Prisma schema: Tenant, User, RefreshToken, Product, Category, ProductImage, Cart, CartItem, Order, OrderItem, OrderHistory + enums (Status, Role, ProductStatus, OrderStatus)
-- [ ] 2.2 Create `packages/shared/src/types/tenant.ts`: Tenant, TenantTheme, CreateTenantDTO, UpdateThemeDTO
-- [ ] 2.3 Create `packages/shared/src/types/auth.ts`: LoginRequest, JwtPayload, AuthResponse, ForgotPasswordRequest, ResetPasswordRequest
-- [ ] 2.4 Create `packages/shared/src/types/product.ts`: ProductDTO, CreateProductDTO, ProductFilters
-- [ ] 2.5 Create `packages/shared/src/types/category.ts`: CategoryDTO, CategoryTreeNode
-- [ ] 2.6 Create `packages/shared/src/types/cart.ts`: CartDTO, CartItemDTO, AddCartItemDTO, MergeCartDTO, MergeWarning, CartStore
-- [ ] 2.7 Create `packages/shared/src/types/order.ts`: OrderDTO, OrderItemDTO, OrderHistoryEntry, OrderFilters, OrderStatusChangedEvent
-- [ ] 2.8 Create `packages/shared/src/types/asset.ts`: AssetStore interface, ImageSizes
-- [ ] 2.9 Create `packages/shared/src/types/role.ts`: Role enum, hasMinRole utility
-- [ ] 2.10 Write Prisma seed: demo tenant (`tienda-demo`) + super-admin user
-- [ ] 2.11 Generate migration, verify `prisma db push` connects to PostgreSQL
-- [ ] 2.12 Verify: `pnpm lint`, `pnpm typecheck` pass across all packages
+- [x] 2.1 Write full Prisma schema: Tenant, User, RefreshToken, Product, Category, ProductImage, Cart, CartItem, Order, OrderItem, OrderHistory + enums (Status, Role, ProductStatus, OrderStatus)
+- [x] 2.2 Create `packages/shared/src/types/tenant.ts`: Tenant, TenantTheme, CreateTenantDTO, UpdateThemeDTO
+- [x] 2.3 Create `packages/shared/src/types/auth.ts`: LoginRequest, JwtPayload, AuthResponse, ForgotPasswordRequest, ResetPasswordRequest
+- [x] 2.4 Create `packages/shared/src/types/product.ts`: ProductDTO, CreateProductDTO, ProductFilters
+- [x] 2.5 Create `packages/shared/src/types/category.ts`: CategoryDTO, CategoryTreeNode
+- [x] 2.6 Create `packages/shared/src/types/cart.ts`: CartDTO, CartItemDTO, AddCartItemDTO, MergeCartDTO, MergeWarning, CartStore
+- [x] 2.7 Create `packages/shared/src/types/order.ts`: OrderDTO, OrderItemDTO, OrderHistoryEntry, OrderFilters, OrderStatusChangedEvent
+- [x] 2.8 Create `packages/shared/src/types/asset.ts`: AssetStore interface, ImageSizes
+- [x] 2.9 Create `packages/shared/src/types/role.ts`: Role enum, hasMinRole utility
+- [x] 2.10 Write Prisma seed: demo tenant (`tienda-demo`) + super-admin user
+- [x] 2.11 Generate migration, verify `prisma db push` connects to PostgreSQL
+- [x] 2.12 Verify: `pnpm lint`, `pnpm typecheck` pass across all packages
 
 ## Phase 3: Backend — Auth & Middleware
 

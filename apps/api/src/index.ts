@@ -8,6 +8,9 @@ import { tenantRoutes } from "./plugins/tenants.js";
 import { assetRoutes } from "./plugins/assets.js";
 import { catalogRoutes } from "./plugins/catalog.js";
 import { adminCatalogRoutes } from "./plugins/admin-catalog.js";
+import { cartRoutes } from "./plugins/cart.js";
+import { cartMergeRoutes } from "./plugins/cart-merge.js";
+import { orderRoutes } from "./plugins/orders.js";
 import { resolveTenant } from "./middleware/resolve-tenant.js";
 
 const PORT = parseInt(process.env.PORT || "3001", 10);
@@ -48,6 +51,9 @@ async function main() {
   await app.register(assetRoutes);
   await app.register(catalogRoutes);
   await app.register(adminCatalogRoutes);
+  await app.register(cartRoutes);
+  await app.register(cartMergeRoutes);
+  await app.register(orderRoutes);
 
   try {
     await app.listen({ port: PORT, host: HOST });

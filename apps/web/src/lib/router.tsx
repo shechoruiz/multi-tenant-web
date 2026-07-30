@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import { TenantLayout } from "../components/TenantLayout";
+import { LoginPage } from "../pages/public/LoginPage";
 
 export function AppRouter() {
   return (
@@ -12,7 +13,7 @@ export function AppRouter() {
           <Route path="products/:id" element={<div className="p-8 text-center"><p className="text-muted-foreground">Detalle producto</p></div>} />
           <Route path="categories" element={<div className="p-8 text-center"><p className="text-muted-foreground">Categorías</p></div>} />
           <Route path="cart" element={<div className="p-8 text-center"><p className="text-muted-foreground">Carrito</p></div>} />
-          <Route path="login" element={<div className="p-8 text-center"><p className="text-muted-foreground">Login</p></div>} />
+          <Route path="login" element={<LoginPage />} />
 
           {/* Admin routes (protected by auth guard) */}
           <Route path="admin" element={<div className="p-8 text-center"><p className="text-muted-foreground">Admin Dashboard</p></div>} />

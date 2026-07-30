@@ -16,7 +16,7 @@
    docker compose up -d
    pnpm install
    pnpm --filter @shelf/db db:migrate
-   pnpm --filter @shelf/db db:push
+   pnpm --filter @shelf/db db:seed
    pnpm dev
 
 4. URLs

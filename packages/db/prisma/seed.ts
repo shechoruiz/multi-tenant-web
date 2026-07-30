@@ -1,5 +1,5 @@
 import { PrismaClient, Role, ProductStatus } from "@prisma/client";
-import { hashSync } from "bcryptjs";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
@@ -40,7 +40,7 @@ async function main() {
 
   // ── Super-admin user ─────────────────────────────────────────────────────────
 
-  const adminPassword = hashSync("admin123", 10);
+  const adminPassword = bcrypt.hashSync("admin123", 10);
 
   await prisma.user.upsert({
     where: { email_tenantId: { email: "admin@shelf.com", tenantId: null } },
@@ -58,7 +58,7 @@ async function main() {
 
   // ── Demo user (customer) ─────────────────────────────────────────────────────
 
-  const customerPassword = hashSync("demo123", 10);
+  const customerPassword = bcrypt.hashSync("demo123", 10);
 
   await prisma.user.upsert({
     where: {

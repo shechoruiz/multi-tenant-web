@@ -30,13 +30,13 @@ export function LoginPage() {
   return (
     <div className="flex min-h-[calc(100vh-3.5rem)] items-center justify-center bg-muted/30 px-4">
       <Card className="w-full max-w-sm shadow-sm">
-        <CardHeader>
+        <CardHeader className="px-5 pt-5 pb-0">
           <CardTitle>Iniciar sesión</CardTitle>
           <CardDescription>
-            Ingresá tus credenciales para acceder al panel de administración
+            Ingrese sus credenciales para acceder al panel de administración
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="px-5 pt-5 pb-5">
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
               <label htmlFor="email" className="text-sm font-medium">

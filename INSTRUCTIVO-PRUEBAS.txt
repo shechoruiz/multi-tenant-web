@@ -1,0 +1,74 @@
+═══ INSTRUCTIVO PARA PROBAR SHELF EN LOCAL ═══
+
+1. REQUISITOS
+   - Docker corriendo
+   - Node 20+ y pnpm 11+
+
+2. ENV
+
+   Antes de arrancar, creá el archivo packages/db/.env con la
+   conexión a PostgreSQL:
+
+   DATABASE_URL="postgresql://shelf:shelf@localhost:5432/shelf"
+
+3. ARRANCAR
+
+   docker compose up -d
+   pnpm install
+   pnpm --filter @shelf/db db:migrate
+   pnpm --filter @shelf/db db:seed
+   pnpm dev
+
+4. URLs
+
+   Frontend  → http://localhost:5173
+   API       → http://localhost:3001
+   pgAdmin   → http://localhost:5050  (admin@shelf.app / shelf)
+
+5. QUÉ VER
+
+   Frontend → Redirige a /:tenantSlug. Layout con header y placeholder "Tienda".
+              Rutas funcionales: /tienda-demo/products, /tienda-demo/cart,
+              /tienda-demo/login.
+
+   API → Probar endpoints:
+
+     # Health
+     curl localhost:3001/health
+
+     # Login
+     curl -X POST localhost:3001/auth/login \
+       -H 'Content-Type: application/json' \
+       -d '{"slug":"tienda-demo","email":"admin@shelf.com","password":"Admin123!"}'
+
+     # Catálogo público (sin auth)
+     curl localhost:3001/tienda-demo/products
+
+     # Catálogo admin (con token del login)
+     curl localhost:3001/tienda-demo/admin/products \
+       -H 'Authorization: Bearer <accessToken>'
+
+6. DATOS DEL SEED
+
+   Tenant demo  : tienda-demo
+   Super-admin  : admin@shelf.com / Admin123!
+   Categorías   : Electrónica, Ropa, Hogar (+ subcategorías)
+   Productos    : 8 productos de ejemplo con stock
+
+7. ESTADO POR FASE
+
+   Fase 1-2 → Invisible: monorepo + DB funcionando.
+   Fase 3   → Auth funciona vía API. Middlewares listos (resolve-tenant, require-role).
+   Fase 4   → Todos los endpoints listos: tenants, productos, carrito, checkout, órdenes.
+   Fase 5   → Frontend navega con Router, carga tenant/theme, stores listos.
+              Sin páginas reales aún (placeholders).
+   Fase 6   → PENDIENTE: login UI, admin panels, tienda pública, carrito visual.
+   Fase 7   → PENDIENTE: tests unitarios, integración, E2E.
+
+8. RAMAS EN GITHUB
+
+   feat/frontend-pages → Actual (Fase 6 en progreso, solo README actualizado)
+   feat/frontend-foundation → Fase 5 (mezclada a main)
+   feat/backend-capabilities → Fase 4 (mezclada a main)
+   feat/backend-auth-middleware → Fase 3 (mezclada a main)
+   feat/prisma-schema-shared-types → Fase 2 (mezclada a main)

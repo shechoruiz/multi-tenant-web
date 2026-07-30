@@ -28,8 +28,8 @@ export function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-3.5rem)] items-center justify-center px-4">
-      <Card className="w-full max-w-sm">
+    <div className="flex min-h-[calc(100vh-3.5rem)] items-center justify-center bg-muted/30 px-4">
+      <Card className="w-full max-w-sm shadow-sm">
         <CardHeader>
           <CardTitle>Iniciar sesión</CardTitle>
           <CardDescription>

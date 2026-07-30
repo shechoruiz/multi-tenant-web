@@ -29,7 +29,13 @@ export async function authRoutes(app: FastifyInstance): Promise<void> {
     }
 
     const user = await prisma.user.findFirst({
-      where: { email, tenantId: tenant.id },
+      where: {
+        email,
+        OR: [
+          { tenantId: tenant.id },
+          { tenantId: null, role: Role.super_admin },
+        ],
+      },
     });
 
     if (!user || !user.isActive) {

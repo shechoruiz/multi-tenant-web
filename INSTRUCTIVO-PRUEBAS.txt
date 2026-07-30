@@ -39,7 +39,7 @@
      # Login
      curl -X POST localhost:3001/auth/login \
        -H 'Content-Type: application/json' \
-       -d '{"slug":"tienda-demo","email":"admin@shelf.com","password":"Admin123!"}'
+       -d '{"slug":"tienda-demo","email":"admin@shelf.com","password":"admin123"}'
 
      # Catálogo público (sin auth)
      curl localhost:3001/tienda-demo/products
@@ -51,7 +51,7 @@
 6. DATOS DEL SEED
 
    Tenant demo  : tienda-demo
-   Super-admin  : admin@shelf.com / Admin123!
+   Super-admin  : admin@shelf.com / admin123
    Categorías   : Electrónica, Ropa, Hogar (+ subcategorías)
    Productos    : 8 productos de ejemplo con stock
 

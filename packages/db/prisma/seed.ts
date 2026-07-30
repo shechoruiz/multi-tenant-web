@@ -42,17 +42,21 @@ async function main() {
 
   const adminPassword = bcrypt.hashSync("admin123", 10);
 
-  await prisma.user.upsert({
-    where: { email_tenantId: { email: "admin@shelf.com", tenantId: null } },
-    update: {},
-    create: {
-      email: "admin@shelf.com",
-      name: "Super Admin",
-      password: adminPassword,
-      role: Role.super_admin,
-      isActive: true,
-    },
+  const existingAdmin = await prisma.user.findFirst({
+    where: { email: "admin@shelf.com", tenantId: null },
   });
+
+  if (!existingAdmin) {
+    await prisma.user.create({
+      data: {
+        email: "admin@shelf.com",
+        name: "Super Admin",
+        password: adminPassword,
+        role: Role.super_admin,
+        isActive: true,
+      },
+    });
+  }
 
   console.log("  ✓ Super-admin user created: admin@shelf.com / admin123");
 

@@ -21,7 +21,7 @@ export function AppRouter() {
         <Route path="/:tenantSlug" element={<TenantLayout />}>
           {/* Public routes */}
           <Route index element={<div className="p-8 text-center"><p className="text-muted-foreground">Tienda</p></div>} />
-          <Route path="products" element={<ProductsIndexPage />} />
+          <Route path="products" element={<PublicProductsPage />} />
           <Route path="products/:id" element={<ProductDetailPage />} />
           <Route path="categories" element={<div className="p-8 text-center"><p className="text-muted-foreground">Categorías</p></div>} />
           <Route path="category/:slug" element={<CategoryPage />} />
@@ -31,7 +31,7 @@ export function AppRouter() {
           {/* Admin routes (protected by auth guard) */}
           <Route path="admin" element={<AdminLayout />}>
             <Route index element={<div className="p-8 text-center"><p className="text-muted-foreground">Bienvenido al panel de administración</p></div>} />
-          <Route path="products" element={<PublicProductsPage />} />
+          <Route path="products" element={<ProductsIndexPage />} />
             <Route path="products/nuevo" element={<ProductFormPage />} />
             <Route path="products/:id" element={<ProductFormPage />} />
             <Route path="categories" element={<CategoriesIndexPage />} />

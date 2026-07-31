@@ -97,11 +97,15 @@
    La app redirige / → /tienda-demo. Todas las rutas públicas y admin
    viven bajo /:tenantSlug.
 
-   7.1 Tienda pública (sin login)
+    7.1 Tienda pública (sin login)
+       - http://localhost:5173/tienda-demo/products → listado completo
+         de productos con buscador (nombre, descripción o SKU) y filtros
+         por rango de precio (mínimo/máximo). Consume la API pública
+         GET /tienda-demo/products (sin auth).
        - http://localhost:5173/tienda-demo/products/<id>  → detalle de
          producto con galería de imágenes y botón «Añadir al carrito».
-         Para obtener un id real: abre el listado de categoría o consulta
-         la API (GET /tienda-demo/products) y copia un id.
+         Para obtener un id real: abre el listado de producto (arriba) o
+         de categoría, o consulta la API y copia un id.
        - http://localhost:5173/tienda-demo/category/electronica → grid
          de productos de la categoría (slug resolvido client-side).
        - http://localhost:5173/tienda-demo/cart → carrito con

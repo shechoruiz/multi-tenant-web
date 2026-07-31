@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useNavigate, useParams, useSearchParams } from "react-router";
 import { useAuthStore } from "../../stores/auth";
 import { Button } from "../../components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../../components/ui/card";
@@ -7,6 +7,7 @@ import { Input } from "../../components/ui/input";
 
 export function LoginPage() {
   const { tenantSlug } = useParams<{ tenantSlug: string }>();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { login, isLoading } = useAuthStore();
   const [email, setEmail] = useState("");
@@ -21,7 +22,14 @@ export function LoginPage() {
 
     try {
       await login(tenantSlug, email, password);
-      navigate(`/${tenantSlug}/admin`, { replace: true });
+
+      // Vuelve a la ruta de origen cuando existe (ej: carrito), si es interna
+      const redirect = searchParams.get("redirect");
+      const target =
+        redirect && redirect.startsWith(`/${tenantSlug}`)
+          ? redirect
+          : `/${tenantSlug}/admin`;
+      navigate(target, { replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error al iniciar sesión");
     }

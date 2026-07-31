@@ -104,9 +104,9 @@ Chain strategy: stacked-to-main
 - [x] 6.4 Create `apps/web/src/pages/admin/tenants/[id].tsx`: tenant detail + config form
 - [x] 6.5 Create `apps/web/src/pages/admin/tenants/[id]/theme.tsx`: theme editor with color pickers + preview toggle
 - [x] 6.6 Create `apps/web/src/components/TenantThemeEditor.tsx`: reusable color picker + logo upload + live preview
-- [ ] 6.7 Create `apps/web/src/pages/admin/products/index.tsx`: product data table with search/filter
-- [ ] 6.8 Create `apps/web/src/pages/admin/products/[id].tsx`: product create/edit form with image upload
-- [ ] 6.9 Create `apps/web/src/pages/admin/categories/index.tsx`: category tree management with drag hierarchy
+- [x] 6.7 Create `apps/web/src/pages/admin/products/index.tsx`: product data table with search/filter
+- [x] 6.8 Create `apps/web/src/pages/admin/products/[id].tsx`: product create/edit form with image upload
+- [x] 6.9 Create `apps/web/src/pages/admin/categories/index.tsx`: category tree management with drag hierarchy
 - [ ] 6.10 Create `apps/web/src/pages/products/[id].tsx`: public product detail with images + add-to-cart
 - [ ] 6.11 Create `apps/web/src/pages/category/[slug].tsx`: public category listing with product grid
 - [ ] 6.12 Wire cart StoreBadge + mini-cart to header, create checkout flow button

@@ -4,6 +4,7 @@ import { AdminLayout } from "../components/AdminLayout";
 import { LoginPage } from "../pages/public/LoginPage";
 import { TenantsIndexPage } from "../pages/admin/tenants";
 import { TenantDetailPage } from "../pages/admin/tenants/[id]";
+import { TenantThemePage } from "../pages/admin/tenants/[id]/theme";
 import { AdminThemePage } from "../pages/admin/theme";
 
 export function AppRouter() {
@@ -28,6 +29,7 @@ export function AppRouter() {
             <Route path="orders" element={<div className="p-8 text-center"><p className="text-muted-foreground">Admin Órdenes</p></div>} />
             <Route path="tenants" element={<TenantsIndexPage />} />
             <Route path="tenants/:id" element={<TenantDetailPage />} />
+            <Route path="tenants/:id/theme" element={<TenantThemePage />} />
           </Route>
         </Route>
 

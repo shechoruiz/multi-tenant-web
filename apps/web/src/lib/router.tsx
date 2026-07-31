@@ -7,6 +7,7 @@ import { TenantDetailPage } from "../pages/admin/tenants/[id]";
 import { TenantThemePage } from "../pages/admin/tenants/[id]/theme";
 import { AdminThemePage } from "../pages/admin/theme";
 import { ProductsIndexPage } from "../pages/admin/products";
+import { ProductFormPage } from "../pages/admin/products/[id]";
 
 export function AppRouter() {
   return (
@@ -25,6 +26,8 @@ export function AppRouter() {
           <Route path="admin" element={<AdminLayout />}>
             <Route index element={<div className="p-8 text-center"><p className="text-muted-foreground">Bienvenido al panel de administración</p></div>} />
             <Route path="products" element={<ProductsIndexPage />} />
+            <Route path="products/nuevo" element={<ProductFormPage />} />
+            <Route path="products/:id" element={<ProductFormPage />} />
             <Route path="categories" element={<div className="p-8 text-center"><p className="text-muted-foreground">Admin Categorías</p></div>} />
             <Route path="theme" element={<AdminThemePage />} />
             <Route path="orders" element={<div className="p-8 text-center"><p className="text-muted-foreground">Admin Órdenes</p></div>} />

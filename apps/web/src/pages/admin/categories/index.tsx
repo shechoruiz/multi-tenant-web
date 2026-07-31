@@ -57,6 +57,45 @@ function buildTree(categories: Category[]): CategoryTreeNode[] {
   return roots;
 }
 
+/** Devuelve true si mover `sourceId` bajo `newParentId` crearía un ciclo en la jerarquía. */
+function wouldCreateCycle(categories: Category[], sourceId: string, newParentId: string | null): boolean {
+  if (!newParentId || newParentId === sourceId) return newParentId === sourceId;
+
+  const byId = new Map(categories.map((c) => [c.id, c]));
+  let current: Category | undefined = byId.get(newParentId);
+
+  while (current) {
+    if (current.id === sourceId) return true;
+    current = current.parentId ? byId.get(current.parentId) : undefined;
+  }
+
+  return false;
+}
+
+/** Conjunto de ids de todos los descendientes de `id` (incluyéndolo a él). */
+function collectBranchIds(categories: Category[], id: string): Set<string> {
+  const byParent = new Map<string, Category[]>();
+  for (const cat of categories) {
+    if (cat.parentId) {
+      const siblings = byParent.get(cat.parentId) ?? [];
+      siblings.push(cat);
+      byParent.set(cat.parentId, siblings);
+    }
+  }
+
+  const result = new Set<string>();
+  const queue = [id];
+  while (queue.length > 0) {
+    const current = queue.shift()!;
+    if (result.has(current)) continue;
+    result.add(current);
+    for (const child of byParent.get(current) ?? []) {
+      queue.push(child.id);
+    }
+  }
+  return result;
+}
+
 export function CategoriesIndexPage() {
   const { tenantSlug } = useParams<{ tenantSlug: string }>();
   const [categories, setCategories] = useState<Category[]>([]);
@@ -132,6 +171,11 @@ export function CategoriesIndexPage() {
       parentId: form.parentId || undefined,
     };
 
+    if (editingId && wouldCreateCycle(categories, editingId, form.parentId || null)) {
+      setError("Una categoría no puede ser hija de sí misma ni de una de sus subcategorías.");
+      return;
+    }
+
     try {
       if (editingId) {
         await api<Category>(`/${tenantSlug}/admin/categories/${editingId}`, {
@@ -177,6 +221,13 @@ export function CategoriesIndexPage() {
 
   async function moveCategory(categoryId: string, newParentId: string | null) {
     if (categoryId === newParentId) return;
+
+    if (wouldCreateCycle(categories, categoryId, newParentId)) {
+      setError("No se puede mover una categoría dentro de su propia rama.");
+      setDraggingId(null);
+      setDragOverId(null);
+      return;
+    }
 
     setIsMoving(true);
     setError(null);
@@ -408,7 +459,7 @@ export function CategoriesIndexPage() {
                 >
                   <option value="">Ninguna (categoría raíz)</option>
                   {categories
-                    .filter((cat) => cat.id !== editingId)
+                    .filter((cat) => !editingId || !collectBranchIds(categories, editingId).has(cat.id))
                     .map((cat) => (
                       <option key={cat.id} value={cat.id}>
                         {cat.name}

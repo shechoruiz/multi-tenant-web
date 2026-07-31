@@ -195,6 +195,12 @@ export function ProductFormPage() {
       stock: Number.isFinite(stock) ? stock : 0,
       status: form.status,
       categoryId: form.categoryId || undefined,
+      images: [
+        ...existingImages.map((img) => ({ url: img.url, altText: img.altText, sortOrder: img.sortOrder })),
+        ...(newImageUrl
+          ? [{ url: newImageUrl, altText: null, sortOrder: existingImages.length }]
+          : []),
+      ],
     };
 
     setIsSaving(true);

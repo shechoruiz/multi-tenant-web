@@ -1,4 +1,4 @@
-import { Link, Navigate, Outlet, useParams } from "react-router";
+import { Navigate, NavLink, Outlet, useParams } from "react-router";
 import { LayoutDashboard, Package, Tags, ShoppingCart, Palette, Building2, type LucideIcon } from "lucide-react";
 import { hasMinRole, Role } from "@shelf/shared";
 import { useAuthStore } from "../stores/auth";
@@ -46,16 +46,22 @@ export function AdminLayout() {
       <aside className="sticky top-14 hidden h-[calc(100vh-3.5rem)] w-56 shrink-0 border-r border-border bg-muted/30 md:block">
         <nav className="flex flex-col gap-1 p-3">
           {visibleItems.map((item) => (
-            <Link
+            <NavLink
               key={item.to}
               to={item.to}
-              className={cn(
-                "flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-              )}
+              end={item.to === `/${tenantSlug}/admin`}
+              className={({ isActive }) =>
+                cn(
+                  "flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors",
+                  isActive
+                    ? "bg-primary text-primary-foreground font-medium shadow-sm"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                )
+              }
             >
               <item.icon className="size-4" />
               {item.label}
-            </Link>
+            </NavLink>
           ))}
         </nav>
       </aside>

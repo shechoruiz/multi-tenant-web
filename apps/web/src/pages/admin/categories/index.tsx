@@ -343,7 +343,7 @@ export function CategoriesIndexPage() {
 
   return (
     <div className="mx-auto max-w-3xl">
-      <CardHeader className="px-0">
+      <CardHeader className="px-0 pb-6">
         <CardTitle>Categorías</CardTitle>
         <CardDescription>
           Organice el catálogo en una jerarquía de categorías. Arrastre una categoría sobre otra para hacerla hija, o
@@ -355,7 +355,7 @@ export function CategoriesIndexPage() {
       {success && <p className="mb-4 text-sm text-emerald-600">{success}</p>}
 
       <Card className="mb-4">
-        <CardContent className="flex flex-col gap-3 px-5 pt-4">
+        <CardContent className="flex flex-col gap-3">
           {isLoading ? (
             <div className="p-4 text-center text-sm text-muted-foreground">Cargando categorías...</div>
           ) : tree.length === 0 ? (

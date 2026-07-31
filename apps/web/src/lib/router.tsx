@@ -9,6 +9,7 @@ import { AdminThemePage } from "../pages/admin/theme";
 import { ProductsIndexPage } from "../pages/admin/products";
 import { ProductFormPage } from "../pages/admin/products/[id]";
 import { CategoriesIndexPage } from "../pages/admin/categories";
+import { ProductDetailPage } from "../pages/products/[id]";
 
 export function AppRouter() {
   return (
@@ -18,7 +19,7 @@ export function AppRouter() {
           {/* Public routes */}
           <Route index element={<div className="p-8 text-center"><p className="text-muted-foreground">Tienda</p></div>} />
           <Route path="products" element={<div className="p-8 text-center"><p className="text-muted-foreground">Productos</p></div>} />
-          <Route path="products/:id" element={<div className="p-8 text-center"><p className="text-muted-foreground">Detalle producto</p></div>} />
+          <Route path="products/:id" element={<ProductDetailPage />} />
           <Route path="categories" element={<div className="p-8 text-center"><p className="text-muted-foreground">Categorías</p></div>} />
           <Route path="cart" element={<div className="p-8 text-center"><p className="text-muted-foreground">Carrito</p></div>} />
           <Route path="login" element={<LoginPage />} />

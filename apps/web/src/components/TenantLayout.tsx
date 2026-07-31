@@ -1,14 +1,19 @@
 import { Outlet, useParams, Link, useNavigate } from "react-router";
 import { useTenant } from "../hooks/useTenant";
 import { useTheme } from "../hooks/useTheme";
+import { useCart } from "../hooks/useCart";
 import { useAuthStore } from "../stores/auth";
-import { useEffect } from "react";
+import { StoreBadge } from "./StoreBadge";
+import { MiniCart } from "./MiniCart";
+import { useEffect, useState } from "react";
 import { getAccessToken } from "../lib/api";
 
 export function TenantLayout() {
   const { tenantSlug } = useParams<{ tenantSlug: string }>();
   const { tenant, isLoading: tenantLoading } = useTenant(tenantSlug);
-  const { isLoading: themeLoading } = useTheme(tenantSlug);
+  const { theme, isLoading: themeLoading } = useTheme(tenantSlug);
+  const { itemCount } = useCart(tenantSlug);
+  const [cartOpen, setCartOpen] = useState(false);
   const { isAuthenticated, isLoading: authLoading, refresh, logout } = useAuthStore();
   const navigate = useNavigate();
 
@@ -20,6 +25,11 @@ export function TenantLayout() {
       useAuthStore.setState({ isLoading: false });
     }
   }, [refresh]);
+
+  // Close the mini-cart when navigating
+  useEffect(() => {
+    setCartOpen(false);
+  }, [tenantSlug]);
 
   if (tenantLoading || themeLoading || authLoading) {
     return (
@@ -39,20 +49,31 @@ export function TenantLayout() {
       <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
           <div className="flex items-center gap-6">
-            <Link to={`/${tenantSlug}`} className="font-bold text-lg">
-              {tenant?.name ?? tenantSlug}
+            <Link to={`/${tenantSlug}`} className="flex items-center gap-2 font-bold text-lg">
+              {theme?.logoUrl ? (
+                <img
+                  src={theme.logoUrl}
+                  alt={tenant?.name ?? tenantSlug}
+                  className="h-8 max-w-32 object-contain"
+                />
+              ) : (
+                tenant?.name ?? tenantSlug
+              )}
             </Link>
             <nav className="hidden md:flex items-center gap-4 text-sm">
               <Link to={`/${tenantSlug}/products`} className="text-muted-foreground hover:text-foreground transition-colors">
                 Productos
               </Link>
-              <Link to={`/${tenantSlug}/cart`} className="text-muted-foreground hover:text-foreground transition-colors">
-                Carrito
-              </Link>
             </nav>
           </div>
 
           <div className="flex items-center gap-3">
+            <div className="relative">
+              <StoreBadge count={itemCount} onClick={() => setCartOpen((open) => !open)} />
+              {cartOpen && (
+                <MiniCart tenantSlug={tenantSlug!} onClose={() => setCartOpen(false)} />
+              )}
+            </div>
             {isAuthenticated ? (
               <>
                 <Link

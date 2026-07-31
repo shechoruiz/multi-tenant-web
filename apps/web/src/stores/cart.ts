@@ -19,6 +19,40 @@ export interface CartItemDisplay {
   subtotal: number;
 }
 
+interface PublicProductDetail {
+  id: string;
+  name: string;
+  price: number;
+  images: Array<{ url: string; altText: string | null; sortOrder: number }>;
+}
+
+/** Resuelve el display de los items anónimos contra el catálogo público (precio actual). */
+async function resolveAnonymousItems(
+  tenantSlug: string,
+  localItems: LocalCartItem[],
+): Promise<CartItemDisplay[]> {
+  const resolved = await Promise.allSettled(
+    localItems.map(async (item): Promise<CartItemDisplay> => {
+      const product = await api<PublicProductDetail>(`/${tenantSlug}/products/${item.productId}`, {
+        skipAuth: true,
+      });
+      return {
+        id: item.productId,
+        productId: item.productId,
+        productName: product.name,
+        productImage: product.images[0]?.url ?? null,
+        price: Number(product.price),
+        quantity: item.quantity,
+        subtotal: Number(product.price) * item.quantity,
+      };
+    }),
+  );
+
+  return resolved
+    .filter((r): r is PromiseFulfilledResult<CartItemDisplay> => r.status === "fulfilled")
+    .map((r) => r.value);
+}
+
 export interface CartState {
   items: CartItemDisplay[];
   total: number;
@@ -31,6 +65,7 @@ export interface CartState {
   removeItem: (tenantSlug: string, itemId: string) => Promise<void>;
   clearCart: () => Promise<void>;
   mergeAnonymous: (tenantSlug: string) => Promise<void>;
+  refreshAnonymous: (tenantSlug: string) => Promise<void>;
 }
 
 export const useCartStore = create<CartState>((set, get) => ({
@@ -45,11 +80,13 @@ export const useCartStore = create<CartState>((set, get) => ({
 
     if (!isAuthenticated) {
       const local = getLocalCart(tenantSlug);
-      // We need product details for display; for now store basic info
+      const items = await resolveAnonymousItems(tenantSlug, local);
       set({
         isLoading: false,
         isAnonymous: true,
-        itemCount: local.reduce((sum, i) => sum + i.quantity, 0),
+        items,
+        total: items.reduce((sum, i) => sum + i.subtotal, 0),
+        itemCount: items.reduce((sum, i) => sum + i.quantity, 0),
       });
       return;
     }
@@ -77,8 +114,7 @@ export const useCartStore = create<CartState>((set, get) => ({
 
     if (isAnonymous) {
       addToLocalCart(tenantSlug, productId, quantity);
-      const items = getLocalCart(tenantSlug);
-      set({ itemCount: items.reduce((sum, i) => sum + i.quantity, 0) });
+      await get().refreshAnonymous(tenantSlug);
       return;
     }
 
@@ -97,8 +133,7 @@ export const useCartStore = create<CartState>((set, get) => ({
 
     if (isAnonymous) {
       updateLocalCartItem(tenantSlug, itemId, quantity);
-      const items = getLocalCart(tenantSlug);
-      set({ itemCount: items.reduce((sum, i) => sum + i.quantity, 0) });
+      await get().refreshAnonymous(tenantSlug);
       return;
     }
 
@@ -116,8 +151,7 @@ export const useCartStore = create<CartState>((set, get) => ({
 
     if (isAnonymous) {
       removeFromLocalCart(tenantSlug, itemId);
-      const items = getLocalCart(tenantSlug);
-      set({ itemCount: items.reduce((sum, i) => sum + i.quantity, 0) });
+      await get().refreshAnonymous(tenantSlug);
       return;
     }
 
@@ -128,6 +162,15 @@ export const useCartStore = create<CartState>((set, get) => ({
   clearCart: async () => {
     clearLocalCart();
     set({ items: [], total: 0, itemCount: 0 });
+  },
+
+  refreshAnonymous: async (tenantSlug: string) => {
+    const items = await resolveAnonymousItems(tenantSlug, getLocalCart(tenantSlug));
+    set({
+      items,
+      total: items.reduce((sum, i) => sum + i.subtotal, 0),
+      itemCount: items.reduce((sum, i) => sum + i.quantity, 0),
+    });
   },
 
   mergeAnonymous: async (tenantSlug: string) => {

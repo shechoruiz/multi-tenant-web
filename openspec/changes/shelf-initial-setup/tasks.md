@@ -107,9 +107,9 @@ Chain strategy: stacked-to-main
 - [x] 6.7 Create `apps/web/src/pages/admin/products/index.tsx`: product data table with search/filter
 - [x] 6.8 Create `apps/web/src/pages/admin/products/[id].tsx`: product create/edit form with image upload
 - [x] 6.9 Create `apps/web/src/pages/admin/categories/index.tsx`: category tree management with drag hierarchy
-- [ ] 6.10 Create `apps/web/src/pages/products/[id].tsx`: public product detail with images + add-to-cart
-- [ ] 6.11 Create `apps/web/src/pages/category/[slug].tsx`: public category listing with product grid
-- [ ] 6.12 Wire cart StoreBadge + mini-cart to header, create checkout flow button
+- [x] 6.10 Create `apps/web/src/pages/products/[id].tsx`: public product detail with images + add-to-cart
+- [x] 6.11 Create `apps/web/src/pages/category/[slug].tsx`: public category listing with product grid
+- [x] 6.12 Wire cart StoreBadge + mini-cart to header, create checkout flow button
 
 ## Phase 7: Testing
 

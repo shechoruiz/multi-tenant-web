@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import { TenantLayout } from "../components/TenantLayout";
+import { AdminLayout } from "../components/AdminLayout";
 import { LoginPage } from "../pages/public/LoginPage";
 
 export function AppRouter() {
@@ -16,11 +17,13 @@ export function AppRouter() {
           <Route path="login" element={<LoginPage />} />
 
           {/* Admin routes (protected by auth guard) */}
-          <Route path="admin" element={<div className="p-8 text-center"><p className="text-muted-foreground">Admin Dashboard</p></div>} />
-          <Route path="admin/products" element={<div className="p-8 text-center"><p className="text-muted-foreground">Admin Productos</p></div>} />
-          <Route path="admin/categories" element={<div className="p-8 text-center"><p className="text-muted-foreground">Admin Categorías</p></div>} />
-          <Route path="admin/theme" element={<div className="p-8 text-center"><p className="text-muted-foreground">Admin Tema</p></div>} />
-          <Route path="admin/orders" element={<div className="p-8 text-center"><p className="text-muted-foreground">Admin Órdenes</p></div>} />
+          <Route path="admin" element={<AdminLayout />}>
+            <Route index element={<div className="p-8 text-center"><p className="text-muted-foreground">Bienvenido al panel de administración</p></div>} />
+            <Route path="products" element={<div className="p-8 text-center"><p className="text-muted-foreground">Admin Productos</p></div>} />
+            <Route path="categories" element={<div className="p-8 text-center"><p className="text-muted-foreground">Admin Categorías</p></div>} />
+            <Route path="theme" element={<div className="p-8 text-center"><p className="text-muted-foreground">Admin Tema</p></div>} />
+            <Route path="orders" element={<div className="p-8 text-center"><p className="text-muted-foreground">Admin Órdenes</p></div>} />
+          </Route>
         </Route>
 
         {/* Root redirect */}

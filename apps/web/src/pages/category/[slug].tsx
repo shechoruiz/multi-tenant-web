@@ -31,6 +31,7 @@ export function CategoryPage() {
   useEffect(() => {
     if (!tenantSlug || !slug) return;
 
+    const categorySlug = slug;
     let cancelled = false;
 
     async function load() {
@@ -45,7 +46,7 @@ export function CategoryPage() {
 
         if (cancelled) return;
 
-        const match = findCategoryBySlug(tree, slug);
+        const match = findCategoryBySlug(tree, categorySlug);
         if (!match) {
           setNotFound(true);
           setCategory(null);

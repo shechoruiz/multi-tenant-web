@@ -1,11 +1,10 @@
-import { useEffect, useState, type ChangeEvent } from "react";
+import { useEffect, useState } from "react";
 import type { TenantThemeDTO, UpdateThemeDTO } from "@shelf/shared";
 import { ImagePlus, Trash2, Eye, EyeOff, Save } from "lucide-react";
 import { api } from "../lib/api";
 import { buttonVariants } from "./ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Input } from "./ui/input";
-import { cn } from "../lib/utils";
 
 interface UploadResponse {
   thumbnail: string;

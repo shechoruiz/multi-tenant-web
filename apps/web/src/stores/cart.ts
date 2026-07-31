@@ -19,7 +19,7 @@ export interface CartItemDisplay {
   subtotal: number;
 }
 
-interface CartState {
+export interface CartState {
   items: CartItemDisplay[];
   total: number;
   itemCount: number;

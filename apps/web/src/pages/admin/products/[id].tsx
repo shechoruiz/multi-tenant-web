@@ -248,7 +248,7 @@ export function ProductFormPage() {
         Volver a productos
       </Link>
 
-      <CardHeader className="px-0">
+      <CardHeader className="px-0 pb-6">
         <CardTitle>{createMode ? "Nuevo producto" : "Editar producto"}</CardTitle>
         <CardDescription>
           Complete la información del producto. El SKU debe ser único dentro de la tienda.
@@ -264,7 +264,7 @@ export function ProductFormPage() {
             <CardTitle>Información básica</CardTitle>
             <CardDescription>Datos principales del producto</CardDescription>
           </CardHeader>
-          <CardContent className="flex flex-col gap-4 px-5 pt-1">
+          <CardContent className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
               <label htmlFor="name" className="text-sm font-medium">
                 Nombre
@@ -288,7 +288,7 @@ export function ProductFormPage() {
                 onChange={(e) => setField("description", e.target.value)}
                 placeholder="Descripción breve del producto"
                 rows={4}
-                className="w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+                className="w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm shadow-xs outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
               />
             </div>
 
@@ -345,7 +345,7 @@ export function ProductFormPage() {
                   id="status"
                   value={form.status}
                   onChange={(e) => setField("status", e.target.value as ProductStatus)}
-                  className="h-9 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+                  className="h-9 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-sm outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
                 >
                   <option value="active">Activo</option>
                   <option value="inactive">Inactivo</option>
@@ -361,7 +361,7 @@ export function ProductFormPage() {
                 id="categoryId"
                 value={form.categoryId}
                 onChange={(e) => setField("categoryId", e.target.value)}
-                className="h-9 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+                className="h-9 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-sm outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
               >
                 <option value="">Sin categoría</option>
                 {categories.map((cat) => (
@@ -381,7 +381,7 @@ export function ProductFormPage() {
               Suba una imagen en formato PNG, JPEG o WebP (máximo 10 MB)
             </CardDescription>
           </CardHeader>
-          <CardContent className="flex flex-col gap-4 px-5 pt-1">
+          <CardContent className="flex flex-col gap-4">
             {(existingImages.length > 0 || newImageUrl) && (
               <div className="flex flex-wrap gap-3">
                 {existingImages.map((img) => (

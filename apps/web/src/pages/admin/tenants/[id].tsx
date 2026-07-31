@@ -182,7 +182,7 @@ export function TenantDetailPage() {
                     prev ? { ...prev, status: e.target.value as FormState["status"] } : prev
                   )
                 }
-                className="h-9 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+                className="h-9 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-sm outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50"
               >
                 <option value="active">Activo</option>
                 <option value="suspended">Suspendido</option>

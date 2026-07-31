@@ -1,74 +1,240 @@
-═══ INSTRUCTIVO PARA PROBAR SHELF EN LOCAL ═══
+═══════════════════════════════════════════════════════════════════
+ INSTRUCTIVO PARA PROBAR SHELF EN LOCAL
+ (actualizado al 2026-07-31 — Fases 1 a 6 completas)
+═══════════════════════════════════════════════════════════════════
 
 1. REQUISITOS
-   - Docker corriendo
-   - Node 20+ y pnpm 11+
+   - Docker Desktop corriendo (PostgreSQL 16 + pgAdmin 4)
+   - Node.js 20+ y pnpm 11+ (el proyecto usa pnpm 11.17.0)
+   - Git
 
-2. ENV
+2. VARIABLES DE ENTORNO (crear antes de arrancar)
 
-   Antes de arrancar, creá el archivo packages/db/.env con la
-   conexión a PostgreSQL:
+   2.1 CREAR packages/db/.env — obligatorio (conexión a PostgreSQL).
+       Copiar desde el ejemplo:
 
-   DATABASE_URL="postgresql://shelf:shelf@localhost:5432/shelf"
+       cp packages/db/.env.example packages/db/.env
 
-3. ARRANCAR
+       Contenido esperado:
 
-   docker compose up -d
+       DATABASE_URL="postgresql://shelf:shelf@localhost:5432/shelf"
+
+       Nota: usuario/contraseña/base coinciden con docker-compose.yml.
+
+   2.2 apps/api/.env — OPCIONAL en desarrollo. La API tiene valores
+       por defecto, pero puedes crear el archivo para sobreescribirlos:
+
+       PORT=3001
+       HOST=0.0.0.0
+       JWT_SECRET=shelf-dev-secret-do-not-use-in-prod
+       UPLOADS_DIR=./uploads
+
+       - JWT_SECRET: si no existe, usa "shelf-dev-secret-do-not-use-in-prod".
+       - UPLOADS_DIR: si no existe, guarda las imágenes en apps/api/uploads
+         (la carpeta se crea sola al subir la primera imagen).
+
+   2.3 apps/web NO necesita variables de entorno: el Vite dev server
+       usa proxy hacia la API (localhost:3001). No crees .env aquí.
+
+3. INSTALAR DEPENDENCIAS (primera vez o tras clonar)
+
    pnpm install
-   pnpm --filter @shelf/db db:migrate
-   pnpm --filter @shelf/db db:seed
-   pnpm dev
 
-4. URLs
+   Esto instala todo el monorepo (apps/web, apps/api, packages/db,
+   packages/config, packages/shared) vía pnpm workspaces.
 
-   Frontend  → http://localhost:5173
-   API       → http://localhost:3001
-   pgAdmin   → http://localhost:5050  (admin@shelf.app / shelf)
+4. ARRANCAR (orden exacto)
 
-5. QUÉ VER
+   4.1 Levantar la base de datos:
 
-   Frontend → Redirige a /:tenantSlug. Layout con header y placeholder "Tienda".
-              Rutas funcionales: /tienda-demo/products, /tienda-demo/cart,
-              /tienda-demo/login.
+       docker compose up -d
 
-   API → Probar endpoints:
+       Espera a que postgres esté sano (revisa con docker ps — el
+       contenedor shelf-postgres debe estar "healthy").
 
-     # Health
-     curl localhost:3001/health
+   4.2 Aplicar la migración y sembrar datos:
 
-     # Login
-     curl -X POST localhost:3001/auth/login \
-       -H 'Content-Type: application/json' \
-       -d '{"slug":"tienda-demo","email":"admin@shelf.com","password":"admin123"}'
+       pnpm --filter @shelf/db db:migrate
+       pnpm --filter @shelf/db db:seed
 
-     # Catálogo público (sin auth)
-     curl localhost:3001/tienda-demo/products
+       - db:migrate aplica la migración inicial (schema + datos vacíos).
+       - db:seed crea el tenant demo, usuarios y catálogo de ejemplo.
+       - Si ya corriste antes y solo quieres resetear: pnpm --filter
+         @shelf/db db:push (sincroniza el schema sin historial) y luego
+         vuelve a correr db:seed. NO corras db:migrate dos veces seguidas
+         si ya está aplicada (Prisma te preguntará por una nueva migración).
 
-     # Catálogo admin (con token del login)
-     curl localhost:3001/tienda-demo/admin/products \
-       -H 'Authorization: Bearer <accessToken>'
+   4.3 Iniciar frontend + backend (dev):
 
-6. DATOS DEL SEED
+       pnpm dev
 
-   Tenant demo  : tienda-demo
-   Super-admin  : admin@shelf.com / admin123
-   Categorías   : Electrónica, Ropa, Hogar (+ subcategorías)
-   Productos    : 8 productos de ejemplo con stock
+       Levanta ambos procesos con turbo:
+       - Frontend Vite en :5173
+       - API Fastify con hot-reload en :3001
 
-7. ESTADO POR FASE
+5. URLs
 
-   Fase 1-2 → Invisible: monorepo + DB funcionando.
-   Fase 3   → Auth funciona vía API. Middlewares listos (resolve-tenant, require-role).
-   Fase 4   → Todos los endpoints listos: tenants, productos, carrito, checkout, órdenes.
-   Fase 5   → Frontend navega con Router, carga tenant/theme, stores listos.
-              Sin páginas reales aún (placeholders).
-   Fase 6   → PENDIENTE: login UI, admin panels, tienda pública, carrito visual.
-   Fase 7   → PENDIENTE: tests unitarios, integración, E2E.
+   Frontend (app)      → http://localhost:5173
+   API                 → http://localhost:3001
+   Health check API    → http://localhost:3001/health
+   pgAdmin             → http://localhost:5050  (admin@shelf.app / shelf)
+   Prisma Studio (opc.)→ pnpm --filter @shelf/db db:studio
 
-8. RAMAS EN GITHUB
+6. DATOS DEL SEED (credenciales exactas)
 
-   feat/frontend-pages → Actual (Fase 6 en progreso, solo README actualizado)
-   feat/frontend-foundation → Fase 5 (mezclada a main)
-   feat/backend-capabilities → Fase 4 (mezclada a main)
-   feat/backend-auth-middleware → Fase 3 (mezclada a main)
-   feat/prisma-schema-shared-types → Fase 2 (mezclada a main)
+   Tenant demo   : tienda-demo
+   Super-admin   : admin@shelf.com / admin123
+   Cliente       : cliente@demo.com / demo123
+   Categorías    : Electrónica, Ropa, Hogar + subcategorías
+                   (Smartphones, Laptops, Camisas, Muebles)
+   Productos     : 8 productos activos con imágenes placeholder
+                   (stock variado, por ejemplo Sofá Seccional = 10 uds)
+
+   Roles: super_admin > admin > staff > customer
+
+7. QUÉ PROBAR — FRONTEND (Fases 5 y 6 completas)
+
+   La app redirige / → /tienda-demo. Todas las rutas públicas y admin
+   viven bajo /:tenantSlug.
+
+   7.1 Tienda pública (sin login)
+       - http://localhost:5173/tienda-demo/products/<id>  → detalle de
+         producto con galería de imágenes y botón «Añadir al carrito».
+         Para obtener un id real: abre el listado de categoría o consulta
+         la API (GET /tienda-demo/products) y copia un id.
+       - http://localhost:5173/tienda-demo/category/electronica → grid
+         de productos de la categoría (slug resolvido client-side).
+       - http://localhost:5173/tienda-demo/cart → carrito con
+         cantidades editables, subtotal y botón «Finalizar compra».
+       - Header: StoreBadge con contador + MiniCart desplegable.
+       - El tema del tenant (colores, logo, tipografía) debe verse en la
+         tienda pública.
+
+   7.2 Flujo de carrito y checkout
+       1. Añade productos al carrito sin iniciar sesión (se guarda en
+          localStorage).
+       2. Pulsa «Finalizar compra» → te redirige a /login?redirect=... .
+       3. Inicia sesión con cliente@demo.com / demo123.
+       4. El carrito anónimo se fusiona con la cuenta y vuelves al
+          checkout → confirmación con número de pedido.
+
+   7.3 Panel admin (login con admin@shelf.com / admin123)
+       - /tienda-demo/admin → bienvenida al panel.
+       - /tienda-demo/admin/products → listado con búsqueda, filtros
+         por categoría/estado/precio y botón «Nuevo producto».
+       - /tienda-demo/admin/products/nuevo → formulario de creación
+         con subida de imagen real (POST /api/assets/upload).
+       - /tienda-demo/admin/products/<id> → edición (persiste imágenes).
+       - /tienda-demo/admin/categories → árbol jerárquico con
+         drag & drop para reasignar padre (anti-ciclos) y CRUD completo.
+       - /tienda-demo/admin/theme → editor de tema del tenant
+         (colores, logo, tipografía). Los cambios se reflejan en la
+         tienda pública al recargar.
+
+   7.4 Admin super (solo admin@shelf.com, rol super_admin)
+       - /tienda-demo/admin/tenants → listado de tiendas.
+       - /tienda-demo/admin/tenants/<id> → detalle/edición.
+       - /tienda-demo/admin/tenants/<id>/theme → tema de otro tenant.
+
+8. QUÉ PROBAR — API (endpoints reales verificados)
+
+   # Health
+   curl localhost:3001/health
+
+   # Login super-admin (guarda el accessToken para los pasos siguientes)
+   curl -X POST localhost:3001/auth/login \
+     -H 'Content-Type: application/json' \
+     -d '{"slug":"tienda-demo","email":"admin@shelf.com","password":"admin123"}'
+
+   # Login cliente (para carrito/checkout)
+   curl -X POST localhost:3001/auth/login \
+     -H 'Content-Type: application/json' \
+     -d '{"slug":"tienda-demo","email":"cliente@demo.com","password":"demo123"}'
+
+   # Catálogo público (sin auth)
+   curl localhost:3001/tienda-demo/products
+   curl localhost:3001/tienda-demo/products/<id>
+   curl localhost:3001/tienda-demo/categories
+   curl localhost:3001/tienda-demo/theme
+
+   # Catálogo admin (token del super-admin o staff)
+   curl localhost:3001/tienda-demo/admin/products \
+     -H 'Authorization: Bearer <accessToken>'
+
+   # Carrito autenticado (token del cliente)
+   curl localhost:3001/tienda-demo/cart \
+     -H 'Authorization: Bearer <accessToken>'
+
+   # Checkout (token del cliente) — requiere items en el carrito
+   curl -X POST localhost:3001/tienda-demo/orders/checkout \
+     -H 'Authorization: Bearer <accessToken>' \
+     -H 'Content-Type: application/json' \
+     -d '{}'
+
+   # Órdenes del cliente
+   curl localhost:3001/tienda-demo/orders \
+     -H 'Authorization: Bearer <accessToken>'
+
+   # Subir imagen (token con rol admin+; multipart)
+   curl -X POST localhost:3001/api/assets/upload \
+     -H 'Authorization: Bearer <accessToken>' \
+     -F 'file=@ruta/a/imagen.png'
+
+   # Tema admin (token admin)
+   curl localhost:3001/tienda-demo/admin/theme \
+     -H 'Authorization: Bearer <accessToken>'
+
+   # CRUD tenants (solo super_admin)
+   curl localhost:3001/api/tenants \
+     -H 'Authorization: Bearer <accessToken>'
+
+9. COMANDOS DE CALIDAD (antes de entregar)
+
+   pnpm lint        # ESLint en todos los paquetes
+   pnpm typecheck   # TypeScript (ojo: apps/web solo valida con -b, ver abajo)
+   pnpm build       # tsc -b + vite build — ESTA es la validación real del web
+   pnpm test        # vitest — PENDIENTE: no hay tests todavía (Fase 7)
+
+   Nota: el typecheck raíz de apps/web NO valida src (tsconfig con
+   "files": []). La validación real de apps/web es `pnpm build`.
+
+10. ESTADO POR FASE
+
+    Fase 1   → Monorepo + Docker + DB funcionando (invisible).
+    Fase 2   → Schema Prisma (12 modelos) + tipos compartidos + seed.
+    Fase 3   → Auth JWT + refresh rotation + middlewares
+               (resolve-tenant, require-role).
+    Fase 4   → Endpoints completos: tenants, productos, carrito,
+               checkout transaccional, órdenes, tema.
+    Fase 5   → Frontend con Router, carga de tenant/theme, stores
+               (auth, cart con localStorage), TenantLayout.
+    Fase 6   → COMPLETA: login UI, admin (tenants, productos,
+               categorías, tema), tienda pública (producto, categoría,
+               carrito, checkout).
+    Fase 7   → PENDIENTE: tests unitarios, integración y E2E.
+
+11. RAMAS EN GITHUB (todo mergeado a main)
+
+    main                    → Integra todas las fases 1–6
+    feat/public-store       → Fase 6 tajada 3 (mergeada, rama huérfana)
+    bugfix/product-images   → Fix persistencia de imágenes (mergeado)
+    feat/admin-products-categories → Fase 6 tajada 2 (mergeada)
+    feat/frontend-pages-admin      → Fase 6 tajada 1 (mergeada)
+    feat/login-ui                   → Fase 6 primera parte (mergeada)
+    feat/frontend-foundation        → Fase 5 (mergeada)
+    feat/backend-capabilities       → Fase 4 (mergeada)
+    feat/backend-auth-middleware    → Fase 3 (mergeada)
+    feat/prisma-schema-shared-types → Fase 2 (mergeada)
+
+12. PROBLEMAS COMUNES
+
+    - Error de conexión a PostgreSQL → verifica que docker compose up -d
+      terminó y el contenedor está healthy.
+    - "P3005" o conflicto de migración → corre db:push en vez de db:migrate.
+    - Login 401 con admin@shelf.com → corre db:seed de nuevo (el seed
+      actualiza/crea el usuario).
+    - Los colores del admin/login cambian según el tema del tenant →
+      comportamiento esperado tras el fix de theme (Fase 6 tajada 3).
+    - El endpoint público de categorías no existe por slug → la web
+      resuelve el slug client-side; productos de subcategorías no se
+      incluyen en el listado (mejora backend planificada).

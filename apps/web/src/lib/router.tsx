@@ -8,6 +8,7 @@ import { TenantThemePage } from "../pages/admin/tenants/[id]/theme";
 import { AdminThemePage } from "../pages/admin/theme";
 import { ProductsIndexPage } from "../pages/admin/products";
 import { ProductFormPage } from "../pages/admin/products/[id]";
+import { CategoriesIndexPage } from "../pages/admin/categories";
 
 export function AppRouter() {
   return (
@@ -28,7 +29,7 @@ export function AppRouter() {
             <Route path="products" element={<ProductsIndexPage />} />
             <Route path="products/nuevo" element={<ProductFormPage />} />
             <Route path="products/:id" element={<ProductFormPage />} />
-            <Route path="categories" element={<div className="p-8 text-center"><p className="text-muted-foreground">Admin Categorías</p></div>} />
+            <Route path="categories" element={<CategoriesIndexPage />} />
             <Route path="theme" element={<AdminThemePage />} />
             <Route path="orders" element={<div className="p-8 text-center"><p className="text-muted-foreground">Admin Órdenes</p></div>} />
             <Route path="tenants" element={<TenantsIndexPage />} />

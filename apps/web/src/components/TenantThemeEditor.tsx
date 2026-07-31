@@ -156,7 +156,7 @@ export function TenantThemeEditor({ tenantSlug }: TenantThemeEditorProps) {
             <CardTitle>Colores</CardTitle>
             <CardDescription>Colores principales de la tienda en formato HEX</CardDescription>
           </CardHeader>
-          <CardContent className="flex flex-col gap-3 px-5">
+          <CardContent className="flex flex-col gap-3">
             {(Object.keys(colors) as Array<keyof typeof colors>).map((key) => (
               <div key={key} className="flex items-center justify-between gap-3">
                 <label className="text-sm font-medium capitalize">{key}</label>
@@ -185,7 +185,7 @@ export function TenantThemeEditor({ tenantSlug }: TenantThemeEditorProps) {
             <CardTitle>Logo y favicon</CardTitle>
             <CardDescription>Imágenes PNG, JPEG, WebP o SVG</CardDescription>
           </CardHeader>
-          <CardContent className="flex flex-col gap-4 px-5">
+          <CardContent className="flex flex-col gap-4">
             <div className="flex items-center gap-3">
               {logoUrl ? (
                 <img src={logoUrl} alt="Logo de la tienda" className="h-10 w-10 rounded-md border border-border object-contain" />
@@ -253,7 +253,7 @@ export function TenantThemeEditor({ tenantSlug }: TenantThemeEditorProps) {
             <CardTitle>Tipografía</CardTitle>
             <CardDescription>Fuente principal de la tienda</CardDescription>
           </CardHeader>
-          <CardContent className="px-5">
+          <CardContent>
             <select
               value={fontFamily}
               onChange={(e) => {
@@ -304,7 +304,7 @@ export function TenantThemeEditor({ tenantSlug }: TenantThemeEditorProps) {
             <CardTitle>Vista previa</CardTitle>
             <CardDescription>Así se verá la tienda con la configuración actual</CardDescription>
           </CardHeader>
-          <CardContent className="px-5">
+          <CardContent>
             <div
               className="overflow-hidden rounded-lg border border-border"
               style={{ backgroundColor: colors.secondary, color: fg, fontFamily }}

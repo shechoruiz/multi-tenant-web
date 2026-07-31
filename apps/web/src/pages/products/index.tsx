@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router";
 import { ProductCard, type PublicProductCard } from "../../components/ProductCard";
 import { api } from "../../lib/api";
 
-export function ProductsIndexPage() {
+export function PublicProductsIndexPage() {
   const { tenantSlug } = useParams<{ tenantSlug: string }>();
   const [products, setProducts] = useState<PublicProductCard[]>([]);
   const [isLoading, setIsLoading] = useState(true);

@@ -149,7 +149,7 @@ export function ProductsIndexPage() {
             <select
               value={categoryId}
               onChange={(e) => setCategoryId(e.target.value)}
-              className="h-9 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:w-44"
+              className="h-9 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-sm outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 md:w-44"
               aria-label="Filtrar por categoría"
             >
               <option value="">Todas las categorías</option>
@@ -164,7 +164,7 @@ export function ProductsIndexPage() {
           <select
             value={status}
             onChange={(e) => setStatus(e.target.value)}
-            className="h-9 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:w-32"
+            className="h-9 w-full rounded-lg border border-input bg-transparent px-3 py-1 text-sm outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 md:w-32"
             aria-label="Filtrar por estado"
           >
             <option value="">Todos los estados</option>

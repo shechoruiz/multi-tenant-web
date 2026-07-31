@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router";
 import { Check, ShoppingCart } from "lucide-react";
 import { useCartStore } from "../../stores/cart";
 import { api } from "../../lib/api";
-import { Button } from "../../components/ui/button";
+import { Button, buttonVariants } from "../../components/ui/button";
 import { cn } from "../../lib/utils";
 
 interface PublicProduct {
@@ -96,9 +96,12 @@ export function ProductDetailPage() {
         <p className="text-sm text-muted-foreground">
           El producto que buscas no existe o ya no está disponible.
         </p>
-        <Button asChild variant="outline">
-          <Link to={`/${tenantSlug}/products`}>Ver productos</Link>
-        </Button>
+        <Link
+          to={`/${tenantSlug}/products`}
+          className={buttonVariants({ variant: "outline" })}
+        >
+          Ver productos
+        </Link>
       </div>
     );
   }

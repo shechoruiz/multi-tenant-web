@@ -5,6 +5,30 @@ import { requireRole } from "../middleware/require-role.js";
 
 const prisma = new PrismaClient();
 
+export interface ProductImageInput {
+  url: string;
+  altText?: string | null;
+  sortOrder?: number;
+}
+
+/** Validates an images payload; returns null when malformed. Ensures URLs are local uploads or http(s). */
+function normalizeImages(input: unknown): ProductImageInput[] | null {
+  if (input === undefined) return [];
+  if (!Array.isArray(input)) return null;
+
+  const normalized: ProductImageInput[] = [];
+  for (const item of input) {
+    if (typeof item !== "object" || item === null) return null;
+    const { url, altText, sortOrder } = item as Partial<ProductImageInput>;
+    if (typeof url !== "string" || url.length === 0) return null;
+    if (!/^\/(uploads|assets)\//.test(url) && !/^https?:\/\//.test(url)) return null;
+    if (altText !== undefined && altText !== null && typeof altText !== "string") return null;
+    if (sortOrder !== undefined && typeof sortOrder !== "number") return null;
+    normalized.push({ url, altText: altText ?? null, sortOrder });
+  }
+  return normalized;
+}
+
 export async function adminCatalogRoutes(app: FastifyInstance): Promise<void> {
   // All routes in this plugin require at least staff role
   app.addHook("onRequest", requireRole(Role.staff));
@@ -90,10 +114,16 @@ export async function adminCatalogRoutes(app: FastifyInstance): Promise<void> {
       stock?: number;
       status?: string;
       categoryId?: string;
+      images?: ProductImageInput[];
     };
 
     if (!body.name || body.price === undefined || !body.sku) {
       return reply.status(400).send({ error: "name, price and sku are required" });
+    }
+
+    const images = normalizeImages(body.images);
+    if (images === null) {
+      return reply.status(400).send({ error: "images must be an array of { url, altText?, sortOrder? }" });
     }
 
     // Check SKU uniqueness within tenant
@@ -114,9 +144,12 @@ export async function adminCatalogRoutes(app: FastifyInstance): Promise<void> {
         status: (body.status as any) ?? "active",
         categoryId: body.categoryId,
         tenantId,
+        ...(images.length > 0
+          ? { images: { create: images.map((img, index) => ({ ...img, sortOrder: img.sortOrder ?? index })) } }
+          : {}),
       },
       include: {
-        images: true,
+        images: { orderBy: { sortOrder: "asc" } },
         category: { select: { id: true, name: true, slug: true } },
       },
     });
@@ -147,11 +180,32 @@ export async function adminCatalogRoutes(app: FastifyInstance): Promise<void> {
       }
     }
 
+    // Separate images from scalar fields; images replace the full set when present
+    const { images: rawImages, ...scalarData } = body;
+
+    if (rawImages !== undefined) {
+      const images = normalizeImages(rawImages as ProductImageInput[]);
+      if (images === null) {
+        return reply.status(400).send({ error: "images must be an array of { url, altText?, sortOrder? }" });
+      }
+      await prisma.productImage.deleteMany({ where: { productId: id } });
+      if (images.length > 0) {
+        await prisma.productImage.createMany({
+          data: images.map((img, index) => ({
+            productId: id,
+            url: img.url,
+            altText: img.altText ?? null,
+            sortOrder: img.sortOrder ?? index,
+          })),
+        });
+      }
+    }
+
     const updated = await prisma.product.update({
       where: { id },
-      data: body,
+      data: scalarData,
       include: {
-        images: true,
+        images: { orderBy: { sortOrder: "asc" } },
         category: { select: { id: true, name: true, slug: true } },
       },
     });

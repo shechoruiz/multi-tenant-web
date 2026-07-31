@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import { TenantLayout } from "../components/TenantLayout";
 import { AdminLayout } from "../components/AdminLayout";
 import { LoginPage } from "../pages/public/LoginPage";
+import { TenantsIndexPage } from "../pages/admin/tenants";
 
 export function AppRouter() {
   return (
@@ -23,6 +24,7 @@ export function AppRouter() {
             <Route path="categories" element={<div className="p-8 text-center"><p className="text-muted-foreground">Admin Categorías</p></div>} />
             <Route path="theme" element={<div className="p-8 text-center"><p className="text-muted-foreground">Admin Tema</p></div>} />
             <Route path="orders" element={<div className="p-8 text-center"><p className="text-muted-foreground">Admin Órdenes</p></div>} />
+            <Route path="tenants" element={<TenantsIndexPage />} />
           </Route>
         </Route>
 

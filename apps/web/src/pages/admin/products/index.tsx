@@ -47,7 +47,7 @@ function getStatusLabel(status: ProductStatus): string {
   return status === "active" ? "Activo" : "Inactivo";
 }
 
-export function ProductsIndexPage() {
+export function AdminProductsIndexPage() {
   const { tenantSlug } = useParams<{ tenantSlug: string }>();
   const [products, setProducts] = useState<AdminProduct[]>([]);
   const [categories, setCategories] = useState<CategoryOption[]>([]);

@@ -98,12 +98,12 @@ Chain strategy: stacked-to-main
 
 ## Phase 6: Frontend — Pages & Components
 
-- [ ] 6.1 Create `apps/web/src/pages/login.tsx`: slug + email + password form with validation
-- [ ] 6.2 Create admin layout: sidebar nav scoped to tenant, role-based menu items
-- [ ] 6.3 Create `apps/web/src/pages/admin/tenants/index.tsx`: tenant list table (super-admin only)
-- [ ] 6.4 Create `apps/web/src/pages/admin/tenants/[id].tsx`: tenant detail + config form
-- [ ] 6.5 Create `apps/web/src/pages/admin/tenants/[id]/theme.tsx`: theme editor with color pickers + preview toggle
-- [ ] 6.6 Create `apps/web/src/components/TenantThemeEditor.tsx`: reusable color picker + logo upload + live preview
+- [x] 6.1 Create `apps/web/src/pages/login.tsx`: slug + email + password form with validation
+- [x] 6.2 Create admin layout: sidebar nav scoped to tenant, role-based menu items
+- [x] 6.3 Create `apps/web/src/pages/admin/tenants/index.tsx`: tenant list table (super-admin only)
+- [x] 6.4 Create `apps/web/src/pages/admin/tenants/[id].tsx`: tenant detail + config form
+- [x] 6.5 Create `apps/web/src/pages/admin/tenants/[id]/theme.tsx`: theme editor with color pickers + preview toggle
+- [x] 6.6 Create `apps/web/src/components/TenantThemeEditor.tsx`: reusable color picker + logo upload + live preview
 - [ ] 6.7 Create `apps/web/src/pages/admin/products/index.tsx`: product data table with search/filter
 - [ ] 6.8 Create `apps/web/src/pages/admin/products/[id].tsx`: product create/edit form with image upload
 - [ ] 6.9 Create `apps/web/src/pages/admin/categories/index.tsx`: category tree management with drag hierarchy

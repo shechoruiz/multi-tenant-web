@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router";
 import { TenantLayout } from "../components/TenantLayout";
 import { AdminLayout } from "../components/AdminLayout";
 import { LoginPage } from "../pages/public/LoginPage";
+import { HomePage } from "../pages/home";
 import { TenantsIndexPage } from "../pages/admin/tenants";
 import { TenantDetailPage } from "../pages/admin/tenants/[id]";
 import { TenantThemePage } from "../pages/admin/tenants/[id]/theme";
@@ -20,7 +21,7 @@ export function AppRouter() {
       <Routes>
         <Route path="/:tenantSlug" element={<TenantLayout />}>
           {/* Public routes */}
-          <Route index element={<div className="p-8 text-center"><p className="text-muted-foreground">Tienda</p></div>} />
+          <Route index element={<HomePage />} />
           <Route path="products" element={<PublicProductsIndexPage />} />
           <Route path="products/:id" element={<ProductDetailPage />} />
           <Route path="categories" element={<div className="p-8 text-center"><p className="text-muted-foreground">Categorías</p></div>} />

@@ -98,6 +98,9 @@
    viven bajo /:tenantSlug.
 
     7.1 Tienda pública (sin login)
+       - http://localhost:5173/tienda-demo → home público con hero (nombre
+         de la tienda + CTA), chips de categorías (enlazan a
+         /category/<slug>) y productos destacados (primeros 8 del catálogo).
        - http://localhost:5173/tienda-demo/products → listado completo
          de productos con buscador (nombre, descripción o SKU) y filtros
          por rango de precio (mínimo/máximo). Consume la API pública

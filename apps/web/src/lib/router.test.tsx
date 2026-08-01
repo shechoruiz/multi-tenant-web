@@ -59,6 +59,24 @@ async function renderAt(path: string) {
 }
 
 describe("AppRouter — rutas de productos", () => {
+  it("renderiza el home público en /:tenantSlug", async () => {
+    unauthenticate();
+    await renderAt("/tienda-demo");
+
+    // El home renderiza el hero con CTA y la sección de destacados
+    expect(await screen.findByRole("heading", { level: 1 })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Productos destacados" })).toBeInTheDocument();
+    expect(screen.getByText("Ver todos →")).toBeInTheDocument();
+
+    // NO debe renderizar la página pública de productos ni la admin
+    expect(
+      screen.queryByText("Todos los productos disponibles en la tienda."),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("Catálogo de la tienda: stock, precios y estado de cada producto"),
+    ).not.toBeInTheDocument();
+  });
+
   it("renderiza la página pública de productos en /:tenantSlug/products", async () => {
     unauthenticate();
     await renderAt("/tienda-demo/products");
